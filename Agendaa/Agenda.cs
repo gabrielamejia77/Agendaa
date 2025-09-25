@@ -14,12 +14,34 @@ namespace Agendaa
 {
     public partial class Agenda : Form
     {
-
         private BaseDatosJson baseDatos;
+
+        // Ruta fija para guardar en Mis Documentos
+        private string rutaArchivo = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+            "agenda.json"
+        );
 
         public Agenda()
         {
             InitializeComponent();
+
+            // Guardar al editar celdas
+            dgvAgenda.CellValueChanged += dgvAgenda_CellValueChanged;
+
+            // Detectar cuando termina de editar una celda (importante para combos o checks)
+            dgvAgenda.CurrentCellDirtyStateChanged += (s, e) =>
+            {
+                if (dgvAgenda.IsCurrentCellDirty)
+                    dgvAgenda.CommitEdit(DataGridViewDataErrorContexts.Commit);
+            };
+
+            // Guardar al agregar o quitar filas
+            dgvAgenda.RowsAdded += dgvAgenda_RowsChanged;
+            dgvAgenda.RowsRemoved += dgvAgenda_RowsChanged;
+
+            // Guardar al cerrar el formulario
+            this.FormClosing += Agenda_FormClosing;
         }
 
         private BaseDatosJson CargarDatos()
@@ -57,7 +79,7 @@ namespace Agendaa
             };
 
             string json = JsonConvert.SerializeObject(lista, opciones);
-            File.WriteAllText(sfdJson.FileName, json);
+            File.WriteAllText(rutaArchivo, json);
         }
 
         private void CargarRegistros(BaseDatosJson registros)
@@ -68,31 +90,21 @@ namespace Agendaa
                 dgvAgenda.Rows.Add(new object[]
                 { contacto.nombre, contacto.app, contacto.apm, contacto.direccion, contacto.telefono, contacto.correo });
             }
-
-            dgvAgenda.Rows.Clear();
-            foreach (var contacto in registros.Contactos)
-            {
-                dgvAgenda.Rows.Add(new object[]
-                { contacto.nombre, contacto.app, contacto.apm, contacto.direccion, contacto.telefono, contacto.correo });
-            }
-
-
         }
+
         private void ActualizarStatus(BaseDatosJson registros)
         {
             lblRegistros.Text = $"Registros: {registros.TotalRegistros}";
             lblActualizacion.Text = $"Última actualización: {registros.Actualizacion:dd/MM/yyyy HH:mm:ss}";
         }
 
-
         private void cargar_Click(object sender, EventArgs e)
         {
-
-            if (ofdJson.ShowDialog() == DialogResult.OK)
+            if (File.Exists(rutaArchivo))
             {
                 try
                 {
-                    string json = File.ReadAllText(ofdJson.FileName);
+                    string json = File.ReadAllText(rutaArchivo);
                     var registros = JsonConvert.DeserializeObject<BaseDatosJson>(json);
                     CargarRegistros(registros);
                     ActualizarStatus(registros);
@@ -102,28 +114,46 @@ namespace Agendaa
                     MessageBox.Show("Error: " + ex.Message, "Sistema",
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-
-
+            }
+            else
+            {
+                MessageBox.Show("No existe un archivo de agenda aún.", "Sistema",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
-        private void guardar_Click(object sender, EventArgs e)
+        // 🔹 Guardado automático centralizado
+        private void GuardarAutomatico()
         {
-
             try
             {
                 var baseDatos = CargarDatos();
-                if (sfdJson.ShowDialog() == DialogResult.OK)
-                {
-                    GuardarJson(baseDatos);
-                    ActualizarStatus(baseDatos);
-                }
+                GuardarJson(baseDatos);
+                ActualizarStatus(baseDatos);
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Error: " + ex.Message, "Sistema",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        // 🔹 Cuando cambie una celda
+        private void dgvAgenda_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            GuardarAutomatico();
+        }
+
+        // 🔹 Cuando agregues o borres filas
+        private void dgvAgenda_RowsChanged(object sender, EventArgs e)
+        {
+            GuardarAutomatico();
+        }
+
+        // 🔹 Cuando cierres el formulario
+        private void Agenda_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            GuardarAutomatico();
         }
     }
 }

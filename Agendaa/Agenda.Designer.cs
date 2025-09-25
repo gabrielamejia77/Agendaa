@@ -138,17 +138,7 @@
             this.cargar.Text = "Cargar";
             this.cargar.UseVisualStyleBackColor = true;
             this.cargar.Click += new System.EventHandler(this.cargar_Click);
-            // 
-            // guardar
-            // 
-            this.guardar.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.guardar.Location = new System.Drawing.Point(522, 303);
-            this.guardar.Name = "guardar";
-            this.guardar.Size = new System.Drawing.Size(103, 38);
-            this.guardar.TabIndex = 3;
-            this.guardar.Text = "Guardar";
-            this.guardar.UseVisualStyleBackColor = true;
-            this.guardar.Click += new System.EventHandler(this.guardar_Click);
+            
             // 
             // lblRegistros
             // 
