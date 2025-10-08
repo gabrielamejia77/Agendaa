@@ -38,11 +38,10 @@
             this.sfdJson = new System.Windows.Forms.SaveFileDialog();
             this.ofdJson = new System.Windows.Forms.OpenFileDialog();
             this.status = new System.Windows.Forms.StatusStrip();
-            this.cargar = new System.Windows.Forms.Button();
-            this.guardar = new System.Windows.Forms.Button();
             this.lblRegistros = new System.Windows.Forms.ToolStripStatusLabel();
             this.relleno = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblActualizacion = new System.Windows.Forms.ToolStripStatusLabel();
+            this.cargar = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAgenda)).BeginInit();
             this.status.SuspendLayout();
             this.SuspendLayout();
@@ -128,18 +127,6 @@
             this.status.TabIndex = 1;
             this.status.Text = "statuus";
             // 
-            // cargar
-            // 
-            this.cargar.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cargar.Location = new System.Drawing.Point(663, 303);
-            this.cargar.Name = "cargar";
-            this.cargar.Size = new System.Drawing.Size(107, 38);
-            this.cargar.TabIndex = 2;
-            this.cargar.Text = "Cargar";
-            this.cargar.UseVisualStyleBackColor = true;
-            this.cargar.Click += new System.EventHandler(this.cargar_Click);
-            
-            // 
             // lblRegistros
             // 
             this.lblRegistros.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -161,13 +148,23 @@
             this.lblActualizacion.Size = new System.Drawing.Size(200, 28);
             this.lblActualizacion.Text = "Ultima Actualizacion: ";
             // 
+            // cargar
+            // 
+            this.cargar.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cargar.Location = new System.Drawing.Point(663, 303);
+            this.cargar.Name = "cargar";
+            this.cargar.Size = new System.Drawing.Size(107, 38);
+            this.cargar.TabIndex = 2;
+            this.cargar.Text = "Cargar";
+            this.cargar.UseVisualStyleBackColor = true;
+            this.cargar.Click += new System.EventHandler(this.cargar_Click);
+            // 
             // Agenda
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.ClientSize = new System.Drawing.Size(1136, 450);
-            this.Controls.Add(this.guardar);
             this.Controls.Add(this.cargar);
             this.Controls.Add(this.status);
             this.Controls.Add(this.dgvAgenda);
@@ -197,7 +194,6 @@
         private System.Windows.Forms.ToolStripStatusLabel relleno;
         private System.Windows.Forms.ToolStripStatusLabel lblActualizacion;
         private System.Windows.Forms.Button cargar;
-        private System.Windows.Forms.Button guardar;
     }
 }
 
